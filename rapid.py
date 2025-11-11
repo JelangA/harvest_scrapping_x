@@ -4,7 +4,6 @@ import csv
 import os
 from typing import List, Dict, Any, Optional
 
-
 API_KEY = "b375545a03mshc7ed63dd0069c3dp1b224ejsnbd60af741021"
 HOST = "twitter-x.p.rapidapi.com"
 HEADERS = {
@@ -12,12 +11,14 @@ HEADERS = {
     'x-rapidapi-host': HOST
 }
 
+# === Folder output ===
+OUTPUT_DIR = "data-tweet-rapid"
 
 def fetch_tweets(keyword: str) -> Optional[Dict[str, Any]]:
     """Ambil data tweet dari API berdasarkan keyword."""
     try:
         conn = http.client.HTTPSConnection(HOST)
-        path = f"/search/?query={keyword}&lang=id&section=top&limit=20"
+        path = f"/search/?query={keyword}&lang=id&section=latest&limit=20"
         conn.request("GET", path, headers=HEADERS)
         res = conn.getresponse()
         raw_data = res.read()
@@ -44,7 +45,7 @@ def extract_tweet_data(item: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 
         lang = legacy.get('lang', '')
         if lang != 'in':
-            return None  # skip tweet non-Indo
+            return None  # hanya tweet Bahasa Indonesia
 
         tweet_id = tweet_results.get('rest_id', '')
         username = user_legacy.get('screen_name', '')
@@ -93,8 +94,11 @@ def parse_json_response(json_data: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 def save_to_csv(filename: str, tweets: List[Dict[str, Any]]):
     """Simpan hasil tweet ke file CSV (append jika sudah ada)."""
-    file_exists = os.path.exists(filename)
-    with open(filename, 'a', newline='', encoding='utf-8') as csvfile:
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    filepath = os.path.join(OUTPUT_DIR, filename)
+
+    file_exists = os.path.exists(filepath)
+    with open(filepath, 'a', newline='', encoding='utf-8') as csvfile:
         fieldnames = [
             'conversation_id_str', 'created_at', 'favorite_count', 'full_text', 'id_str',
             'image_url', 'in_reply_to_screen_name', 'lang', 'like_count', 'location',
@@ -103,7 +107,6 @@ def save_to_csv(filename: str, tweets: List[Dict[str, Any]]):
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         if not file_exists:
             writer.writeheader()
-
         for tweet in tweets:
             writer.writerow(tweet)
 
@@ -124,8 +127,8 @@ def main():
                 continue
 
             data_to_process = parse_json_response(json_data)
-
             results = []
+
             for item in data_to_process:
                 tweet_data = extract_tweet_data(item)
                 if tweet_data:
@@ -133,7 +136,7 @@ def main():
 
             if results:
                 save_to_csv(filename, results)
-                print(f"   ✅ {len(results)} tweet disimpan ke {filename}")
+                print(f"   ✅ {len(results)} tweet disimpan ke {os.path.join(OUTPUT_DIR, filename)}")
             else:
                 print(f"   ⚠️ Tidak ada tweet berbahasa Indonesia untuk '{keyword}'")
 
