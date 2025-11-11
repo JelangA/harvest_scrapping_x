@@ -1,0 +1,20 @@
+{
+  "sosial": [
+    "sosial",
+    "masyarakat",
+    "budaya",
+    "kehidupan"
+  ],
+  "ekonomi": [
+    "ekonomi",
+    "bisnis",
+    "keuangan",
+    "pasar"
+  ],
+  "politik": [
+    "politik",
+    "pemerintah",
+    "negara",
+    "kebijakan"
+  ]
+}
