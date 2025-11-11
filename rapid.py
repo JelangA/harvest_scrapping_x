@@ -4,7 +4,7 @@ import csv
 import os
 from typing import List, Dict, Any, Optional
 
-API_KEY = "b375545a03mshc7ed63dd0069c3dp1b224ejsnbd60af741021"
+API_KEY = "dd9df48260msh8e97b8e65dfc254p116fccjsne7a70df5df67"
 HOST = "twitter-x.p.rapidapi.com"
 HEADERS = {
     'x-rapidapi-key': API_KEY,

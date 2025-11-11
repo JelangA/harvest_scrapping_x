@@ -55,9 +55,11 @@ def main():
         try:
             subprocess.run(["python", os.path.join("selection.py"), str(batch)], check=True)
             print(f"Merge selesai batch {batch}!\n")
+            subprocess.run(["python", os.path.join("./tweets-data/result/merge batch.py")], check=True)
+            print(f"Merge batch.py selesai untuk batch {batch}")
         except Exception as e:
             print(f"Merge gagal: {e}")
-        time.sleep(5 * 60)  # 5 menit
+        # time.sleep(3 * 60)  # 5 menit
         print(f"Mulai proses merge hasil batch {batch}...")
 
 
