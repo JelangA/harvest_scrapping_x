@@ -2,6 +2,11 @@ import os
 import pandas as pd
 from pymongo import MongoClient
 
+# ====== KONFIGURASI KONEKSI ======
+MONGO_HOST = "72.60.210.20"
+MONGO_PORT = 27017
+USERNAME = "bigodata"
+PASSWORD = "bigodata3"
 
 # ====== PATH FOLDER HASIL ======
 RESULT_DIR = "./result"

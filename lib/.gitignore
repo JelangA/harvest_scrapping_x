@@ -4,6 +4,6 @@ node_modules/
 /playwright/.cache/
 .env
 output/*.csv
-dist
+
 bin
 tweets-data
